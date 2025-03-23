@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Replace the existing theme-switch div with this -->
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <div class="container">
+        <h1>Text Summarizer</h1>
+        <div>
+            <label for="text">Enter your text:</label>
+            <textarea id="text" placeholder="Paste your text here..."></textarea>
+        </div>
+        <div class="controls">
+            <label for="sentences">Number of sentences in summary:</label>
+            <input type="number" id="sentences" value="2" min="1" max="10">
+            <button onclick="summarize()">Summarize</button>
+            <button onclick="clearAll()" class="clear-btn">Clear</button>
+        </div>
+        <div id="summary"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,6 +1,11 @@
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 # Download required NLTK data (run once)
 try:
@@ -42,23 +47,21 @@ def summarize_article(article, num_sentences=2):
 
     return summary
 
-# Process manually entered paragraph
-if __name__ == "__main__":
-    print("Please enter your paragraph (press Enter twice when finished):")
-    lines = []
-    while True:
-        line = input()
-        if line:
-            lines.append(line)
-        else:
-            break
-    paragraph = " ".join(lines)
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-    if not paragraph.strip():
-        print("No text entered. Exiting.")
-    else:
-        print("\nYour entered paragraph:")
-        print(paragraph)
-        print("\nSummary:")
-        summary = summarize_article(paragraph)
-        print(summary)
+@app.route('/summarize', methods=['POST'])
+def summarize():
+    data = request.get_json()
+    text = data.get('text', '')
+    num_sentences = data.get('num_sentences', 2)
+    
+    if not text.strip():
+        return jsonify({'error': 'No text provided'})
+    
+    summary = summarize_article(text, num_sentences)
+    return jsonify({'summary': summary})
+
+if __name__ == "__main__":
+    app.run(debug=True)
